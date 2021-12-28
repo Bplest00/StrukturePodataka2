@@ -30,10 +30,12 @@ position insert(position root,position new_element)
 		if (!root->rchild)
 			{
 			root->rchild = new_element;
+			return new_element;
 			}
 		else 
 			{
 			new_element = insert(root->rchild, new_element);
+			return new_element;
 			}
 		}
 	else if (new_element->value < root->value)
@@ -41,10 +43,12 @@ position insert(position root,position new_element)
 		if (!root->lchild)
 			{
 			root->lchild = new_element;
+			return new_element;
 			}
 		else 
 			{
 			new_element = insert(root->lchild, new_element);
+			return new_element;
 			}
 		}
 	else 
@@ -105,3 +109,50 @@ position FindInTree(position root, int searched)
 		}
 }
 
+position FindRoot(position root) 
+{
+	position temp = root;
+	if (root->lchild)
+	{
+		temp = root->lchild;
+		while (temp->rchild != NULL)
+		{
+			temp = temp->rchild;
+		}
+		return temp;
+	}
+	else if (root->rchild)
+	{
+		temp = root->rchild;
+		while (temp->lchild != NULL)
+		{
+			temp = temp->lchild;
+		}
+		return temp;
+	}
+	return temp;
+}
+
+int ReplaceRoot(position root, position newroot)
+	{
+	newroot->lchild = root->lchild;
+	newroot->rchild = root->rchild;
+	free(root);
+	return EXIT_SUCCESS;
+	}
+
+int DeleteAll(position root) 
+{	
+	position newroot = NULL;
+	position temp=CreateNew(0);
+	temp->rchild = root->rchild;
+	temp->lchild = root->lchild;
+	while (temp->lchild || temp->rchild) 
+		{
+		newroot = FindRoot(root);
+		ReplaceRoot(root, newroot);
+		}
+	free(temp);
+	printf("Tree deleted");
+	return EXIT_SUCCESS;
+}
