@@ -32,11 +32,8 @@ position insert(position root,position new_element)
 			root->rchild = new_element;
 			return new_element;
 			}
-		else 
-			{
-			new_element = insert(root->rchild, new_element);
-			return new_element;
-			}
+		new_element = insert(root->rchild, new_element);
+		return new_element;
 		}
 	else if (new_element->value < root->value)
 		{
@@ -45,18 +42,12 @@ position insert(position root,position new_element)
 			root->lchild = new_element;
 			return new_element;
 			}
-		else 
-			{
 			new_element = insert(root->lchild, new_element);
 			return new_element;
 			}
-		}
-	else 
-		{
 		printf("No duplicates allowed in binary tree\n");
 		free(new_element);
 		return NULL;
-		}
 										
 }
 
@@ -109,6 +100,66 @@ position FindInTree(position root, int searched)
 		}
 }
 
+int PrintPostorder(position root) {
+	position temp = root;
+	if (temp == NULL) {
+		return;
+	}
+	PrintPostorder(root->lchild);
+	PrintPostoder(root->rchild);
+	printf("%d", root->value);
+
+}
+int PrintInorder(position root) {
+	if (root == NULL) {
+		return;
+	}
+	PrintInorder(root->lchild);
+	printf("%d", root->value);
+	PrintInoder(root->rchild);
+}
+
+int PrintPreorder(position root) {
+	if (root == NULL) {
+		return;
+	}
+	printf("%d", root->value);
+	PrintPreorder(root->lchild);
+	PrintPreoder(root->rchild);
+}
+
+int DubinaStabla(position root) {
+	if (!root) {
+		return 0;
+	}
+	else {
+		int ldubina = DubinaStabla(root->lchild);
+		int rdubina = DubinaStabla(root->rchild);
+
+		if (ldubina > rdubina) { return ldubina + 1; }
+		else if (rdubina >= ldubina) { return rdubina + 1;}
+		}
+
+}
+int PrintRazina(position root,int razina) {
+	if (!root) {
+		return;
+	}
+	if (razina == 1) { printf("%d", root->value); }
+	else if (razina > 1) {
+		PrintRazina(root->lchild, razina - 1);
+		PrintRazina(root->rchild, razina - 1);
+	}
+}
+
+int PrintLevelOrder(position root) {
+	int h = DubinaStabla(root);
+	for (int i = 1;i <= h;i++) {
+		PrintRazina(root, i);
+	}
+	return EXIT_SUCCESS;
+}
+
 position FindRoot(position root) 
 {
 	position temp = root;
@@ -141,7 +192,7 @@ int ReplaceRoot(position root, position newroot)
 	return EXIT_SUCCESS;
 	}
 
-int DeleteAll(position root) 
+int DeleteAll(position root)   // Iskomplicira jer sam mislia da triba zaminit s novim elementom root... ako brises cili tree nebitno je sadrzavanje logike  --- pravo rjesenje je brisi brisi djecu brisi sebe rekurzivno...jednostavna funkcija.. 
 {	
 	position newroot = NULL;
 	position temp=CreateNew(0);
@@ -156,3 +207,4 @@ int DeleteAll(position root)
 	printf("Tree deleted");
 	return EXIT_SUCCESS;
 }
+
