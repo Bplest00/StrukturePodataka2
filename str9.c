@@ -54,7 +54,7 @@ position MakeTree(int a[], int n,position root) {
 	}
 	return root;
 }
-int replace(position root) {
+position replace(position root) {
 	int sum=0;
 	position templ, tempr;
 	templ = root->lchild;
@@ -62,14 +62,14 @@ int replace(position root) {
 	if (!root) {
 		return 0;
 	}
-	if (!templ || !tempr) {
-		return root->value;
+	if (templ) {
+		templ=replace(templ);
 	}
-	else {
-		sum = sum + replace(templ) + replace(tempr);
-		return root->value = sum;
+	if (tempr) {
+		tempr = replace(tempr);
 	}
-	
+	root->value = templ->value + tempr->value;
+	return root;
 }
 
 
